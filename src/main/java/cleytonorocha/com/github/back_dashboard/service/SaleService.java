@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import cleytonorocha.com.github.back_dashboard.exception.ItemNotFoundException;
 import cleytonorocha.com.github.back_dashboard.model.entity.Sale;
-import cleytonorocha.com.github.back_dashboard.model.repository.SalesRepository;
+import cleytonorocha.com.github.back_dashboard.model.repository.SaleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 public class SaleService {
 
-    private final SalesRepository salesRepository;
+    private final SaleRepository salesRepository;
 
     public Page<Sale> findAll(Integer page, Integer linesPerPage, String orderBy, String direction) {
         log.info("Fetching all sales with page: {}, linesPerPage: {}, orderBy: {}, direction: {}", page,

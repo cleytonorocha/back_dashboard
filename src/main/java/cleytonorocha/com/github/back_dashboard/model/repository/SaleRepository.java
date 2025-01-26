@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import cleytonorocha.com.github.back_dashboard.model.entity.Sale;
 
-public interface SalesRepository extends JpaRepository<Sale, Long> {
+public interface SaleRepository extends JpaRepository<Sale, Long> {
     
 }
