@@ -33,6 +33,6 @@ public class Employee {
     private LocalDate hireDate;
 
     @OneToMany(mappedBy = "employee")
-    private List<Sales> sales;
+    private List<Sale> sales;
 
 }

@@ -2,7 +2,6 @@ package cleytonorocha.com.github.back_dashboard.rest.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +23,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
-@RequestMapping("/products")
+@RequestMapping("/product")
 @Tag(name = "Product", description = "Product management APIs")
 public class ProductController {
 

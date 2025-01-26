@@ -30,6 +30,6 @@ public class Local {
     private Address address;
 
     @OneToMany(mappedBy = "local")
-    private List<Sales> sales;
+    private List<Sale> sales;
 
 }
