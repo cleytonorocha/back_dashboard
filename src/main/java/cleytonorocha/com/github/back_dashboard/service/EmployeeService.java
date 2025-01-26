@@ -1,41 +1,69 @@
 package cleytonorocha.com.github.back_dashboard.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import cleytonorocha.com.github.back_dashboard.exception.ItemNotFoundException;
 import cleytonorocha.com.github.back_dashboard.model.entity.Employee;
 import cleytonorocha.com.github.back_dashboard.model.repository.EmployeeRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Service
 @AllArgsConstructor
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public Page<Employee> findAll(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        log.info("Fetching all employees with page: {}, linesPerPage: {}, orderBy: {}, direction: {}", page, linesPerPage, orderBy, direction);
+
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        log.debug("PageRequest created: {}", pageRequest);
+
+        Page<Employee> employees = employeeRepository.findAll(pageRequest);
+        log.debug("Employees fetched: {}", employees.getContent());
+
+        log.info("Returning {} employees", employees.getTotalElements());
+
+        return employees;
     }
 
-    public Optional<Employee> getEmployeeById(Long id) {
-        return employeeRepository.findById(id);
+    public Employee findById(Long id) {
+        log.info("Fetching employee with id: {}", id);
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("Employee with id: {} not found", id);
+                    return new ItemNotFoundException();
+                });
     }
 
-    public Employee createEmployee(Employee employee) {
+    public Employee save(Employee employee) {
+        log.info("Creating employee: {}", employee);
         return employeeRepository.save(employee);
     }
 
-    public Employee updateEmployee(Long id, Employee employee) {
-        return employeeRepository.findById(id)
-                .map(m -> {
-                    m.setId(employee.getId());
-                    return employeeRepository.save(m);
-                }).orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
+    public Employee update(Long id, Employee employee) {
+        log.info("Updating employee with id: {}", id);
+        if (employeeRepository.existsById(id)) {
+            employee.setId(id);
+            return employeeRepository.save(employee);
+        } else {
+            log.warn("Employee with id: {} not found", id);
+            throw new ItemNotFoundException();
+        }
     }
 
-    public void deleteEmployee(Long id) {
-        employeeRepository.deleteById(id);
+    public void deleteById(Long id) {
+        log.info("Deleting employee with id: {}", id);
+        if (employeeRepository.existsById(id)) {
+            employeeRepository.deleteById(id);
+        } else {
+            log.warn("Employee with id: {} not found", id);
+            throw new ItemNotFoundException();
+        }
     }
 }

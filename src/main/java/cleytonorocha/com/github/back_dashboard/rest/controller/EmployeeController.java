@@ -1,7 +1,6 @@
 package cleytonorocha.com.github.back_dashboard.rest.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cleytonorocha.com.github.back_dashboard.model.entity.Employee;
@@ -23,29 +23,37 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
+    private final String DEFAULT_LINES_PER_PAGE = "20";
+    private final String DEFAULT_PAGE = "0";
+    private final String DEFAULT_ORDER = "id";
+    private final String DEFAULT_DIRECTION = "ASC";
+
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployees() {
-        List<Employee> employees = employeeService.getAllEmployees();
+    public ResponseEntity<Page<Employee>> findAll(
+            @RequestParam(value = "page", defaultValue = DEFAULT_PAGE) Integer page,
+            @RequestParam(value = "linesPerPage", defaultValue = DEFAULT_LINES_PER_PAGE) Integer linesPerPage,
+            @RequestParam(value = "orderBy", defaultValue = DEFAULT_ORDER) String orderBy,
+            @RequestParam(value = "direction", defaultValue = DEFAULT_DIRECTION) String direction) {
+
+        Page<Employee> employees = employeeService.findAll(page, linesPerPage, orderBy, direction);
         return ResponseEntity.ok(employees);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
-        return employeeService.getEmployeeById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Employee> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(employeeService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
-        Employee savedEmployee = employeeService.createEmployee(employee);
+    public ResponseEntity<Employee> save(@RequestBody Employee employee) {
+        Employee savedEmployee = employeeService.save(employee);
         return ResponseEntity.ok(savedEmployee);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
+    public ResponseEntity<Employee> update(@PathVariable Long id, @RequestBody Employee employee) {
         try {
-            Employee updatedEmployee = employeeService.updateEmployee(id, employee);
+            Employee updatedEmployee = employeeService.update(id, employee);
             return ResponseEntity.ok(updatedEmployee);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -53,8 +61,8 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
-        employeeService.deleteEmployee(id);
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        employeeService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -24,7 +24,7 @@ import lombok.extern.log4j.Log4j2;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/product")
-@Tag(name = "Product", description = "Product management APIs")
+@Tag(name = "Product", description = "API for managing products")
 public class ProductController {
 
     private final String DEFAULT_LINES_PER_PAGE = "20";
@@ -55,12 +55,12 @@ public class ProductController {
     @GetMapping
     @Operation(summary = "Get all products", description = "Fetches all products")
     public ResponseEntity<Page<ProductDTO>> getAllProducts(
-            @RequestParam(defaultValue = DEFAULT_PAGE) @Min(0) Integer pagina,
-            @RequestParam(defaultValue = DEFAULT_LINES_PER_PAGE) @Min(1) Integer linhasPorPagina,
+            @RequestParam(defaultValue = DEFAULT_PAGE) @Min(0) Integer page,
+            @RequestParam(defaultValue = DEFAULT_LINES_PER_PAGE) @Min(1) Integer linesPerPage,
             @RequestParam(defaultValue = DEFAULT_ORDER) String orderBy,
-            @RequestParam(defaultValue = DEFAULT_DIRECTION) String direcao) {
-        log.info("Fetching all products with page: {}, lines per page: {}, order by: {}, direction: {}", pagina, linhasPorPagina, orderBy, direcao);
-        Page<ProductDTO> products = productService.findAll(pagina, linhasPorPagina, orderBy, direcao);
+            @RequestParam(defaultValue = DEFAULT_DIRECTION) String direction) {
+        log.info("Fetching all products with page: {}, lines per page: {}, order by: {}, direction: {}", page, linesPerPage, orderBy, direction);
+        Page<ProductDTO> products = productService.findAll(page, linesPerPage, orderBy, direction);
         log.info("Products fetched: {}", products);
         return ResponseEntity.ok(products);
     }

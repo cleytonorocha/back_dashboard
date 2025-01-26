@@ -1,9 +1,10 @@
 package cleytonorocha.com.github.back_dashboard.service;
 
-
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import cleytonorocha.com.github.back_dashboard.model.entity.Customer;
@@ -16,11 +17,12 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public Page<Customer> findAll(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        return customerRepository.findAll(pageRequest);
     }
 
-    public Optional<Customer> getCustomerById(Long id) {
+    public Optional<Customer> findById(Long id) {
         return customerRepository.findById(id);
     }
 
@@ -28,7 +30,7 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    public Customer updateCustomer(Long id, Customer updatedCustomer) {
+    public Customer update(Long id, Customer updatedCustomer) {
         return customerRepository.findById(id).map(existingCustomer -> {
             existingCustomer.setFirstName(updatedCustomer.getFirstName());
             existingCustomer.setLastName(updatedCustomer.getLastName());
@@ -39,7 +41,7 @@ public class CustomerService {
         }).orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
     }
 
-    public void deleteCustomer(Long id) {
+    public void deleteById(Long id) {
         customerRepository.deleteById(id);
     }
 }
