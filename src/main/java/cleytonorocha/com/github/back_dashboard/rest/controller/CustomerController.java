@@ -18,13 +18,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/customer")
-@Log4j2
+@Tag(name = "Customer", description = "API for managing customers")
 public class CustomerController {
 
     private final CustomerService customerService;

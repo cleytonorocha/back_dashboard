@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cleytonorocha.com.github.back_dashboard.model.entity.Employee;
 import cleytonorocha.com.github.back_dashboard.service.EmployeeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/employee")
+@Tag(name = "Employee", description = "API for managing employees")
 public class EmployeeController {
 
     private final EmployeeService employeeService;

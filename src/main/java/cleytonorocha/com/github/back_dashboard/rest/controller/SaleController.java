@@ -17,6 +17,7 @@ import cleytonorocha.com.github.back_dashboard.service.SaleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -24,6 +25,7 @@ import lombok.extern.log4j.Log4j2;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/sales")
+@Tag(name = "Sale", description = "API for managing sales")
 public class SaleController {
 
     private final String DEFAULT_LINES_PER_PAGE = "20";
