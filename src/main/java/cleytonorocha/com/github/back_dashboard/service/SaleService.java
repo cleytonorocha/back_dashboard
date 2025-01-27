@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import cleytonorocha.com.github.back_dashboard.exception.ItemNotFoundException;
 import cleytonorocha.com.github.back_dashboard.model.entity.Sale;
 import cleytonorocha.com.github.back_dashboard.model.repository.SaleRepository;
+import cleytonorocha.com.github.back_dashboard.rest.DTO.SaleDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -18,7 +19,7 @@ public class SaleService {
 
     private final SaleRepository salesRepository;
 
-    public Page<Sale> findAll(Integer page, Integer linesPerPage, String orderBy, String direction) {
+    public Page<SaleDTO> findAll(Integer page, Integer linesPerPage, String orderBy, String direction) {
         log.info("Fetching all sales with page: {}, linesPerPage: {}, orderBy: {}, direction: {}", page,
                 linesPerPage, orderBy, direction);
 
@@ -28,30 +29,37 @@ public class SaleService {
         Page<Sale> sales = salesRepository.findAll(pageRequest);
         log.debug("Sales fetched: {}", sales.getContent());
 
+        Page<SaleDTO> saleDTOs = sales.map(SaleDTO::toDTO);
+
         log.info("Returning {} sales", sales.getTotalElements());
 
-        return sales;
+        return saleDTOs;
     }
 
-    public Sale findById(Long id) {
+    public SaleDTO findById(Long id) {
         log.info("Fetching sale with id: {}", id);
-        return salesRepository.findById(id)
+        Sale sale = salesRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("Sale with id: {} not found", id);
                     return new ItemNotFoundException();
                 });
+
+        return SaleDTO.toDTO(sale);
     }
 
-    public Sale save(Sale sale) {
+    public SaleDTO save(Sale sale) {
         log.info("Saving sale: {}", sale);
-        return salesRepository.save(sale);
+        Sale savedSale = salesRepository.save(sale);
+        return SaleDTO.toDTO(savedSale);
     }
 
-    public Sale update(Long id, Sale sale) {
+    public SaleDTO update(Long id, Sale sale) {
         log.info("Updating sale with id: {}", id);
+
         if (salesRepository.existsById(id)) {
             sale.setId(id);
-            return salesRepository.save(sale);
+            Sale updatedSale = salesRepository.save(sale);
+            return SaleDTO.toDTO(updatedSale);
         } else {
             log.warn("Sale with id: {} not found", id);
             throw new ItemNotFoundException();
@@ -67,4 +75,5 @@ public class SaleService {
             throw new ItemNotFoundException();
         }
     }
+
 }

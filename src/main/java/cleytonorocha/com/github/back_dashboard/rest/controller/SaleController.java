@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cleytonorocha.com.github.back_dashboard.model.entity.Sale;
+import cleytonorocha.com.github.back_dashboard.rest.DTO.SaleDTO;
 import cleytonorocha.com.github.back_dashboard.service.SaleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -41,7 +42,7 @@ public class SaleController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping
-    public ResponseEntity<Page<Sale>> findAll(
+    public ResponseEntity<Page<SaleDTO>> findAll(
             @RequestParam(defaultValue = DEFAULT_PAGE) Integer page,
             @RequestParam(defaultValue = DEFAULT_LINES_PER_PAGE) Integer linesPerPage,
             @RequestParam(defaultValue = DEFAULT_ORDER) String orderBy,
@@ -49,7 +50,7 @@ public class SaleController {
 
         log.info("Fetching sales with page: {}, linesPerPage: {}, orderBy: {}, direction: {}", page, linesPerPage,
                 orderBy, direction);
-        Page<Sale> salesPage = salesService.findAll(page, linesPerPage, orderBy, direction);
+        Page<SaleDTO> salesPage = salesService.findAll(page, linesPerPage, orderBy, direction);
         log.info("Fetched {} sales", salesPage.getTotalElements());
 
         return ResponseEntity.ok(salesPage);
@@ -61,7 +62,7 @@ public class SaleController {
             @ApiResponse(responseCode = "404", description = "Sale not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Sale> findById(@PathVariable Long id) {
+    public ResponseEntity<SaleDTO> findById(@PathVariable Long id) {
         log.info("Fetching sale with id: {}", id);
         return ResponseEntity.ok(salesService.findById(id));
     }
@@ -72,9 +73,9 @@ public class SaleController {
             @ApiResponse(responseCode = "400", description = "Invalid sale data")
     })
     @PostMapping
-    public ResponseEntity<Sale> save(@RequestBody Sale sales) {
+    public ResponseEntity<SaleDTO> save(@RequestBody Sale sales) {
         log.info("Creating new sale: {}", sales);
-        Sale savedSales = salesService.save(sales);
+        SaleDTO savedSales = salesService.save(sales);
         log.info("Sale created with id: {}", savedSales.getId());
         return ResponseEntity.ok(savedSales);
     }
@@ -85,10 +86,10 @@ public class SaleController {
             @ApiResponse(responseCode = "404", description = "Sale not found")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Sale> update(@PathVariable Long id, @RequestBody Sale sales) {
+    public ResponseEntity<SaleDTO> update(@PathVariable Long id, @RequestBody Sale sales) {
         try {
             log.info("Updating sale with id: {}", id);
-            Sale updatedSales = salesService.update(id, sales);
+            SaleDTO updatedSales = salesService.update(id, sales);
             log.info("Sale updated with id: {}", updatedSales.getId());
             return ResponseEntity.ok(updatedSales);
         } catch (RuntimeException e) {
