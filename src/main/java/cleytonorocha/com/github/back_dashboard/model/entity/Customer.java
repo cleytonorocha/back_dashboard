@@ -2,6 +2,8 @@ package cleytonorocha.com.github.back_dashboard.model.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +35,8 @@ public class Customer {
     @Embedded
     private Address address;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "customer")
-    private List<Sale> purchase;
+    private List<Sale> purchases;
 
 }

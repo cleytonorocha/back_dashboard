@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,6 +34,7 @@ public class Employee {
     private BigDecimal salary;
     private LocalDate hireDate;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "employee")
     private List<Sale> sales;
 

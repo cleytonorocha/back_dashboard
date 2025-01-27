@@ -2,6 +2,8 @@ package cleytonorocha.com.github.back_dashboard.model.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,11 +30,14 @@ public class Sale {
     private Double totalAmount;
     
     @ManyToOne
+    @JsonBackReference 
     private Customer customer;
 
     @ManyToOne
+    @JsonBackReference 
     private Employee employee;
 
     @ManyToOne
+    @JsonBackReference 
     private Local local;
 }

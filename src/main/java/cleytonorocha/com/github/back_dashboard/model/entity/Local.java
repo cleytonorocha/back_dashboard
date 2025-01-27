@@ -2,6 +2,8 @@ package cleytonorocha.com.github.back_dashboard.model.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Local {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,6 +31,7 @@ public class Local {
     @Embedded
     private Address address;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "local")
     private List<Sale> sales;
 
